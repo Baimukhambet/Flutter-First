@@ -1,5 +1,6 @@
 // import 'dart:html';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MaterialApp(
@@ -43,7 +44,7 @@ class MyApp extends StatefulWidget {
   List<String> names;
   
   @override
-  _MyAppState createState() {
+  State<MyApp> createState() {
     return _MyAppState(names);
   }
 }
@@ -78,7 +79,8 @@ class _MyAppState extends State<MyApp> {
         title: Text(names[i], style: Theme.of(context).textTheme.labelLarge),
         subtitle: Text("Subtitle"),
         onTap: () => (
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SecondRoute(name: names[i])))
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => SecondRoute(name: names[i])))
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => SecondRoute(name: names[i],)))
         ),
         trailing: Icon(Icons.arrow_forward_ios_rounded),
       )),
