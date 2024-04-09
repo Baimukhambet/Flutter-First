@@ -1,77 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'features/crypto_list/crypto_list.dart';
 
 void main() => runApp(MaterialApp(
   routes: {
-    '/':(context) => const MyApp(),
+    '/':(context) => const CryptoListScreen(),
     '/coin':(context) => const SecondRoute()
   },
   theme: ThemeData(
     textTheme:const TextTheme(
+      titleLarge: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: Colors.white
+      ),
       labelLarge: TextStyle(
-        fontFamily: "Courier new", fontSize: 24,
+        fontSize: 24,
         fontWeight: FontWeight.bold, color: Colors.white),
       labelSmall: TextStyle(
-        fontFamily: "Courier new", fontSize: 24,
+        fontSize: 14,
         fontWeight: FontWeight.bold, color: Colors.white
       )
     ),
+    scaffoldBackgroundColor: Colors.black54,
+    dividerColor: Colors.white24,
+    appBarTheme: const AppBarTheme(backgroundColor: Colors.black54)
   )
 ));
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() {
-    return _MyAppState();
-  }
-}
-
-class _MyAppState extends State<MyApp> {
-  final List<String> names = ['Bitcoin', 'PEPE'];
-
-  void _buttonPressed() {
-    setState(() => 
-      names.add('New Name')
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('MY FIRST APP', style: TextStyle(
-          color: Colors.white
-        ),),
-        backgroundColor: Colors.black,
-      ),
-      body: ListView.separated(
-        itemCount: names.length,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, i) => ListTile(
-        title: Text(names[i], style: Theme.of(context).textTheme.labelLarge),
-        subtitle: Text("Subtitle", style: Theme.of(context).textTheme.labelSmall),
-        onTap: () => (
-          Navigator.pushNamed(context, '/coin', arguments: names[i])
-        ),
-        leading: SvgPicture.asset(
-          'assets/bitcoin_logo.svg',
-          width: 30,
-          height: 30,
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded),
-      )),
-      backgroundColor: Colors.black,
-      floatingActionButton: FilledButton(
-        onPressed: _buttonPressed,  
-        child: const Text('Press me'),
-      ),
-    );
-  }
-}
 
 class SecondRoute extends StatefulWidget {
   const SecondRoute({super.key});
@@ -100,7 +56,7 @@ class _SecondRouteState extends State<SecondRoute> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(name, style: TextStyle(color: Colors.white)),
+          title: Text(name, style: const TextStyle(color: Colors.white)),
           centerTitle: true,
           backgroundColor: Colors.black,
           
