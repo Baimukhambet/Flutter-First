@@ -1,65 +1,41 @@
-// import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() => runApp(MaterialApp(
-  home: MyApp(names: ['Tima', 'Bina'],),
+  routes: {
+    '/':(context) => const MyApp(),
+    '/coin':(context) => const SecondRoute()
+  },
   theme: ThemeData(
-    textTheme: TextTheme(
-      labelLarge: const TextStyle(
+    textTheme:const TextTheme(
+      labelLarge: TextStyle(
         fontFamily: "Courier new", fontSize: 24,
-        fontWeight: FontWeight.bold, color: Colors.white)
-    )
+        fontWeight: FontWeight.bold, color: Colors.white),
+      labelSmall: TextStyle(
+        fontFamily: "Courier new", fontSize: 24,
+        fontWeight: FontWeight.bold, color: Colors.white
+      )
+    ),
   )
 ));
 
-// class MainApp extends StatelessWidget {
-//   const MainApp({super.key});
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         centerTitle: true,
-//         title: Text('MY FIRST APP', style: TextStyle(
-//           color: Colors.white
-//         ),),
-//         backgroundColor: Colors.black,
-//       ),
-//       body: ListView.builder(
-//         itemCount: 10,
-//         itemBuilder: (context, i) => ListTile(
-//         title: Text('Hello', style: Theme.of(context).textTheme.labelLarge),
-//         subtitle: Text("Subtitle"),
-//         onTap: () => (print('tapped on index $i')),
-//       )),
-//       backgroundColor: Colors.black,
-//     );
-//   }
-// }
-
 class MyApp extends StatefulWidget {
-  MyApp({super.key, required this.names});
+  const MyApp({super.key});
 
-  List<String> names;
-  
   @override
   State<MyApp> createState() {
-    return _MyAppState(names);
+    return _MyAppState();
   }
 }
 
 class _MyAppState extends State<MyApp> {
-  _MyAppState(List<String> names) :
-    this.names = names;
-
-  List<String> names;
+  final List<String> names = ['Bitcoin', 'PEPE'];
 
   void _buttonPressed() {
     setState(() => 
       names.add('New Name')
     );
-    
   }
 
   @override
@@ -74,15 +50,19 @@ class _MyAppState extends State<MyApp> {
       ),
       body: ListView.separated(
         itemCount: names.length,
-        separatorBuilder: (context, index) => Divider(color: Colors.white),
+        separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, i) => ListTile(
         title: Text(names[i], style: Theme.of(context).textTheme.labelLarge),
-        subtitle: Text("Subtitle"),
+        subtitle: Text("Subtitle", style: Theme.of(context).textTheme.labelSmall),
         onTap: () => (
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => SecondRoute(name: names[i])))
-          Navigator.push(context, CupertinoPageRoute(builder: (context) => SecondRoute(name: names[i],)))
+          Navigator.pushNamed(context, '/coin', arguments: names[i])
         ),
-        trailing: Icon(Icons.arrow_forward_ios_rounded),
+        leading: SvgPicture.asset(
+          'assets/bitcoin_logo.svg',
+          width: 30,
+          height: 30,
+        ),
+        trailing: const Icon(Icons.arrow_forward_ios_rounded),
       )),
       backgroundColor: Colors.black,
       floatingActionButton: FilledButton(
@@ -93,9 +73,26 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class SecondRoute extends StatelessWidget {
-  const SecondRoute({super.key, required this.name});
-  final String name;
+class SecondRoute extends StatefulWidget {
+  const SecondRoute({super.key});
+
+  @override
+  State<SecondRoute> createState() => _SecondRouteState();
+}
+
+class _SecondRouteState extends State<SecondRoute> {
+  String name = 'No name Coin :(';
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
+    final args = ModalRoute.of(context)?.settings.arguments;
+    assert(args != null && args is String, "Provide argument of type String!");
+    name = args as String;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +100,13 @@ class SecondRoute extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title:const Text("New Screen", style: TextStyle(color: Colors.white)),
+          title: Text(name, style: TextStyle(color: Colors.white)),
           centerTitle: true,
           backgroundColor: Colors.black,
           
         ),
-        body: Center(
-          child: Text(name, style: TextStyle(
+        body: const Center(
+          child: Text("name", style: TextStyle(
           color: Colors.black,
           fontSize: 24,
           fontWeight: FontWeight.bold,
