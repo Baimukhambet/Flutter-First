@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:second/repositories/crypto_coins/abstract_coins_repository.dart';
 import 'package:second/repositories/crypto_coins/models/crypto_coin.dart';
@@ -17,7 +18,7 @@ class CryptoListBloc extends Bloc<CryptoListEvent, CryptoListState> {
         final coinList = await coinsRepository.getCoinsList();
         emit(CryptoListLoaded(cryptoList: coinList));
       } catch (e) {
-        emit(CryptoListLoadingFailure());
+        emit(CryptoListLoadingFailure(exception: e));
       }
       finally {
         event.completer?.complete();
